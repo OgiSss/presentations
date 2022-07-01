@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Angular 14 update</title>
+
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet"
+		  href="./dist/reveal.css">
+	<link rel="stylesheet"
+		  href="./dist/theme/black.css"
+		  id="theme">
+	<link rel="stylesheet"
+		  href="./plugin/highlight/monokai.css">
+</head>
+
+<body>
+
+	<div class="reveal">
+
+		<div class="slides">
+			<section data-auto-animate
+					 data-auto-animate-unmatched="fade">
+				<h3>Angular 14</h3>
+				<p>What's new in Angular 14?!</p>
+				<p style="text-align: right;">By Oskar Kumor</p>
+				<pre data-id="code"><code data-line-numbers class="hljs" data-trim>
+		   import { Component, Input } from '@angular/core';
+
+		   @Component({
+			 selector: 'app-standalone-component',
+			 standalone: true,
+			 template: `<img src="{{url}}">`,
+		   })
+		   export class StandaloneComponent {
+			 @Input() url: string | undefined;
+		   }
+		   </code></pre>
+			</section>
+
+
+			<section>
+				<section data-auto-animate>
+					<h3>Top 10 Angular 14 Features And Updates</h3>
+					<ul>
+						<li>Standalone Components</li>
+						<li>Strictly Typed Forms </li>
+						<li>Angular CLI Auto-Completion</li>
+						<li>Enhanced Template Diagnostics</li>
+					</ul>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Top 10 Angular 14 Features And Updates</h3>
+					<ul>
+						<li>Standalone Components</li>
+						<li>Strictly Typed Forms </li>
+						<li>Angular CLI Auto-Completion</li>
+						<li>Enhanced Template Diagnostics</li>
+						<li>Streamlined Page Title Accessibility</li>
+						<li>Latest Primitives in the Angular CDK</li>
+						<li>Angular DevTools is now present online</li>
+						<li>Optional Injectors</li>
+						<li>Built-in Enhancements</li>
+						<li>Extended Developer Diagnostics</li>
+					</ul>
+				</section>
+
+			</section>
+
+			<section>
+				<section data-auto-animate>
+					<h3 data-id="text-props">Standalone components</h3>
+				</section>
+
+				<section data-auto-animate>
+					<h3 data-id="text-props">Standalone components</h3>
+
+					<p style="font-size: 18px;">
+						In v14 and higher, standalone components provide a simplified way to build Angular applications.
+						Standalone components, directives, and pipes aim to streamline the authoring experience by
+						reducing
+						the need for NgModules. Existing applications can optionally and incrementally adopt the new
+						standalone style without any breaking changes.
+					</p>
+				</section>
+
+				<section data-auto-animate>
+					<h5>Overview</h5>
+					<p style="font-size:16px;">
+						Components, directives, and pipes can now be marked as standalone: true. Angular classes marked
+						as standalone do not need to be declared in an NgModule (the Angular compiler will report an
+						error if you try).
+						<br />
+						<br />
+						Standalone components specify their dependencies directly instead of getting them through
+						NgModules. For example, if PhotoGalleryComponent is a standalone component, it can directly
+						import another standalone component ImageGridComponent:
+					</p>
+					<pre data-id="code"><code data-line-numbers class="hljs" data-trim>
+			   @Component({
+				 standalone: true,
+				 selector: 'photo-gallery',
+				 imports: [ImageGridComponent],
+				 template: `
+				   ... <image-grid [images]="imageList"></image-grid>
+				 `,
+			   })
+			   export class PhotoGalleryComponent {
+				 // component logic
+			   }
+			   </code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h5>Using existing NgModules in a standalone component</h5>
+					<pre data-id="code"><code data-line-numbers class="hljs" data-trim>
+			   @Component({
+				   standalone: true,
+				   selector: 'photo-gallery',
+				   // an existing module is imported
+				   // directly into a standalone component
+				   imports: [MatButtonModule],
+				   template: `
+					 ...
+					 <button mat-button>Next Page</button>
+				   `,
+				 })
+				 export class PhotoGalleryComponent {
+				   // logic
+				 }
+			   </code></pre>
+				</section>
+				<section data-auto-animate>
+					<h5>Using standalone components in NgModule-based applications</h5>
+					<p style="font-size:16px;">
+						You can import a standalone component (or directive, or pipe) just like you would an NgModule -
+						using NgModule.imports:
+					</p>
+					<pre data-id="code"><code data-line-numbers class="hljs" data-trim>
+			   @NgModule({
+				   declarations: [AlbumComponent],
+				   exports: [AlbumComponent],
+				   imports: [PhotoGalleryComponent],
+				 })
+				 export class AlbumModule {}
+			   </code></pre>
+				</section>
+				<section data-auto-animate>
+					<h5>Lazy loading many routes at once</h5>
+					<p style="font-size:16px;">
+						The loadChildren operation now supports loading a new set of child Routes without needing to
+						write a lazy loaded NgModule that imports RouterModule.forChild to declare the routes. This
+						works when every route loaded this way is using a standalone component.
+					</p>
+					<pre data-id="code"><code data-line-numbers class="hljs" data-trim>
+			   // In the main application:
+			   export const ROUTES: Route[] = [
+					 {path: 'admin', loadChildren: () =>
+					import('./admin/routes').then(mod => mod.ADMIN_ROUTES)},
+				 // ...
+			   ];
+
+			   // In admin/routes.ts:
+			   export const ADMIN_ROUTES: Route[] = [
+					 {path: 'home', component: AdminHomeComponent},
+					 {path: 'users', component: AdminUsersComponent},
+				 // ...
+			   ];
+			   </code></pre>
+				</section>
+			</section>
+
+			<section>
+				<section data-auto-animate>
+					<h3 data-id="text-props">Strictly Typed Forms</h3>
+				</section>
+				<section data-auto-animate>
+					<h3 style="margin-bottom: 100px;">Strictly Typed Forms</h3>
+					<p style="font-size: 16px;">
+						When updating to Angular v14, a migration will automatically replace all the form entities in
+						your application by their untyped versions:
+					</p>
+					<pre style="font-size: 16px;"
+						 data-id="code">
+						<code data-line-numbers class="hljs" data-trim>
+							<script type="text/template">
+							export class RegisterComponent {
+								registerForm: FormGroup;
+
+								constructor() {
+								  this.registerForm = new FormGroup({
+									login: new FormControl(null, Validators.required),
+									passwordGroup: new FormGroup({
+									  password: new FormControl('', Validators.required),
+									  confirm: new FormControl('', Validators.required)
+									}),
+									rememberMe: new FormControl(false, Validators.required)
+								  });
+								}
+							  }
+							</script>
+						</code>
+					</pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3 style="margin-bottom: 100px;">Strictly Typed Forms</h3>
+					<p style="font-size: 16px;">
+						When using the automated migration, you end up with:
+					</p>
+					<pre style="font-size: 16px;"
+						 data-id="code">
+						<code data-line-numbers class="hljs" data-trim>
+							export class RegisterComponent {
+								registerForm: UntypedFormGroup;
+
+								constructor() {
+								  this.registerForm = new UntypedFormGroup({
+									login: new UntypedFormControl(null, Validators.required),
+									passwordGroup: new UntypedFormGroup({
+									  password: new UntypedFormControl('', Validators.required),
+									  confirm: new UntypedFormControl('', Validators.required)
+									}),
+									rememberMe: new UntypedFormControl(false, Validators.required)
+								  });
+								}
+							  }
+						</code>
+					</pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3 style="margin-bottom: 50px;">Strictly Typed Forms</h3>
+					<p style="font-size: 16px;">
+						Our work is to remove all the Untyped* usage, and properly type the form. Let’s start with the
+						code in the constructor as this is the most straightforward.
+
+						Each UntypedFormControl must be converted to FormControl<T>, with T the type of the value of the
+							form control. Most of the time, TypeScript can infer this information based on the initial
+							value given to the FormControl.
+
+							For example, passwordGroup can be converted easily:
+					</p>
+					<pre style="font-size: 16px;"
+						 data-id="code">
+						<code style="width: 100%;" data-line-numbers class="hljs" data-trim>
+							<script type="text/template">
+							passwordGroup: new FormGroup({
+								password: new FormControl('', Validators.required), // inferred as `FormControl<string | null>`
+								confirm: new FormControl('', Validators.required) // inferred as `FormControl<string | null>`
+							  }),
+							</script>
+						</code>
+					</pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Strictly Typed Forms</h3>
+					<p style="font-size: 16px;">
+						When updating to Angular v14, a migration will automatically replace all the form entities in
+						your application by their untyped versions:
+					<ul style="font-size:16px;">
+						<li>FormControl → UntypedFormControl (which is an alias for FormControl<any>)</li>
+						<li>FormGroup → UntypedFormGroup (which is an alias for FormGroup<any>)</li>
+						<li>FormArray → UntypedFormArray (which is an alias for FormArray<any>)</li>
+						<li>FormBuilder → UntypedFormBuilder (which is an alias for FormBuilder<any>)</li>
+					</ul>
+					</p>
+					<pre data-id="code"><code style="font-size: 16px;" data-line-numbers class="hljs" data-trim>
+						<script type="text/template">
+						registerForm: FormGroup<{
+							login: FormControl<string | null>;
+							passwordGroup: FormGroup<{
+							  password: FormControl<string>;
+							  confirm: FormControl<string | null>;
+							}>;
+							rememberMe: FormControl<boolean | null>;
+						  }>;
+
+						  constructor() {
+							this.registerForm = new FormGroup({
+							  login: new FormControl<string | null>(null, Validators.required),
+							  passwordGroup: new FormGroup({
+								password: new FormControl('', Validators.required),
+								confirm: new FormControl('', Validators.required)
+							  }),
+							  rememberMe: new FormControl<boolean | null>(false, Validators.required)
+							});
+						  }
+						</script>
+					</code></pre>
+				</section>
+				<section data-auto-animate>
+					<h3>What do we gain?</h3>
+					<p style="font-size:16px;">
+						Is this migration trouble worth it? In my opinion, definitely. The original forms API is not
+						playing very well with TypeScript. For example, the value of a control or group is typed as any.
+						So we could write this.registerForm.value.whatever and the application would happily compile.
+						This can be a very painful issue when refactoring an application: TypeScript would warn you
+						about every mistake in TS and HTML files… except in forms!
+					</p>
+					<pre data-id="code"><code data-line-numbers class="hljs" data-trim>
+						{
+							login?: string;
+							passwordGroup?: {
+							  password?: string;
+							  confirm?: string;
+							};
+							rememberMe?: boolean;
+						} // this.registerForm.value
+					</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>What do we gain?</h3>
+
+					<pre data-id="code"><code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						<script type="text/template">
+						export class UserService {
+							register(login: string, password: string): Observable<void> {
+							  // ...
+							}
+						}
+
+						const value = this.registerForm.value;
+						// does not compile as the `login` and `password` parameters must be strings
+						// and `value.login`, `value.passwordGroup`, `value.passwordGroup.password`
+						// can all theoretically be undefined
+
+						if (value.login && value.passwordGroup && value.passwordGroup.password) {
+  							// TypeScript narrows the types to `string` inside the `if` block
+  							this.userService.register(value.login, value.passwordGroup.password).subscribe();
+						}
+					</script>
+					</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>A newcomer: FormRecord</h3>
+					<p style="font-size:16px;">
+						FormRecord is a new form entity that has been added to the API. A FormRecord is similar to a
+						FormGroup but the controls must all be of the same type. This can help if you use a FormGroup as
+						a map, to which you add and remove controls dynamically. In that case, properly typing the
+						FormGroup is not really easy, and that’s where FormRecord can help.
+						<br> <br>
+
+						It can be handy when you want to represent a list of checkboxes for example, where your user can
+						add or remove options. For example, our users can add and remove the language they understand
+						(or don’t understand) when they register:
+					</p>
+					<pre data-id="code"><code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						languages: new FormRecord({
+							english: new FormControl(true, { nonNullable: true }),
+							french: new FormControl(false, { nonNullable: true })
+						  });
+
+						// later
+						this.registerForm.get('languages').addControl('spanish', new FormControl(false, { nonNullable: true }));
+
+						// error
+						this.registerForm.get('languages').addControl('spanish', new FormControl(0, { nonNullable: true })); // does not compile
+					</code></pre>
+				</section>
+			</section>
+
+			<section>
+				<section data-auto-animate>
+					<h3 data-id="text-props">Angular inject function</h3>
+				</section>
+				<section data-auto-animate>
+					<h3>Angular inject function</h3>
+					<p style="font-size:16px;">
+						Using Angular's inject() function, we can get a reference to a token from the injector that is
+						active. However, only services and factory providers might be called in.
+					</p>
+					<pre data-id="code"><code style="font-size:13px;" data-line-numbers class="hljs" data-trim>
+						import { inject } from '@angular/core';
+						import { HttpClient } from '@angular/http/client';
+
+						function getUrl(url: string) 	{
+  							return inject(HttpClient).get(url);
+						}
+						@Component({
+						  selector: 'app-root',
+						  templateUrl: './app.component.html',
+						  standalone: true,
+						  styleUrls: ['./app.component.scss']
+						})
+						export class AppComponent{
+						  data$ = getUrl('&#60;url&#62;');
+						}
+					</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Angular inject function</h3>
+
+					<pre data-id="code"><code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						import { inject } from '@angular/core';
+						import { HttpClient } from '@angular/http/client';
+
+						@Component({
+						  selector: 'app-root',
+						  templateUrl: './app.component.html',
+						  standalone: true,
+						  styleUrls: ['./app.component.scss']
+						})
+						export class AppComponent{
+						  window = inject(WINDOW);
+
+						  // constructor(@inject(WINDOW) private window: Window)
+						}
+					</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Angular inject function</h3>
+					<p style="font-size:16px;">
+						Using Angular's inject() function, we can get a service reference and we don't have to pass by
+						super method to the abstract class services (less boilerplate code)
+					</p>
+					<pre data-id="code"><code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						import { inject } from '@angular/core';
+						import { HttpClient } from '@angular/http/client';
+
+						@Component({
+						  selector: 'app-root',
+						  templateUrl: './app.component.html',
+						  standalone: true,
+						  styleUrls: ['./app.component.scss']
+						})
+						export class AppComponent extends SomeBaseComponent{
+						  //constructor(private service1: Service1){
+						  //	super(this.service1)
+						  //}
+						}
+
+						@Directive()
+						  export abstract class SomeBaseComponent{
+
+							const service1 = inject(Service1);
+							//constructor(protected service1: Service1)
+
+							protected someMagicFeature(){
+								this.service1.magic();
+							}
+						}
+					</code></pre>
+				</section>
+			</section>
+			<section>
+				<section data-auto-animate>
+					<h3 data-id="text-props">Streamlined page title accessibility</h3>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Streamlined page title accessibility</h3>
+					<p style="font-size:16px;">
+						Another best practice is ensuring that your app’s page titles uniquely communicate the page’s
+						contents. v13.2 streamlines this with the new Route.title property in the Angular Router.
+					</p>
+					<pre data-id="code"><code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						const routes: Routes = [{
+							path: 'home',
+							component: HomeComponent
+							title: 'My App - Home'  // <-- Page title
+						  }, {
+							path: 'about',
+							component: AboutComponent,
+							title: 'My App - About Me'  // <-- Page title
+						  }];
+				</code></pre>
+				</section>
+
+				<section data-auto-animate>
+					<h3>Streamlined page title accessibility</h3>
+					<p style="font-size:16px;">
+						You can configure more complex title logic by providing a custom TitleStrategy.
+					</p>
+					<pre data-id="code"><code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						const routes: Routes = [{
+							path: 'home',
+							component: HomeComponent
+						  }, {
+							path: 'about',
+							component: AboutComponent,
+							title: 'About Me'  // <-- Page title
+						  }];
+
+						  @Injectable()
+						  export class TemplatePageTitleStrategy extends TitleStrategy {
+							override updateTitle(routerState: RouterStateSnapshot) {
+							  const title = this.buildTitle(routerState);
+							  if (title !== undefined) {
+								document.title = `My App - ${title}`;
+							  } else {
+								document.title = `My App - Home`;
+							};
+						  };
+
+						  @NgModule({
+							…
+							providers: [{provide: TitleStrategy,  useClass: TemplatePageTitleStrategy}]
+						  })
+						  class MainModule {}
+				</code></pre>
+				</section>
+			</section>
+
+			<section data-auto-animate>
+				<h5>Extended developer diagnostics</h5>
+				<p style="font-size:14px">A common developer syntax error is to flip the brackets and parentheses in
+					two-way binding,
+					writing ([]) instead of [()]. Since () sorta looks like a banana and [] sorta looks like a box,
+					we nicknamed this the “banana in a box” error, since the banana should go in the box.</p>
+				<div>
+					<img src="./examples/assets/diagnostics.gif" />
+				</div>
+				<pre data-id="code"><code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+
+Warning: src/app/app.component.ts:7:25 - warning NG8101: In the two-way binding syntax
+the parentheses should be inside the brackets, ex. '[(fruit)]="favoriteFruit"'.
+Find more at https://angular.io/guide/two-way-binding
+<app-favorite-fruit ([fruit])="favoriteFruit"></app-favorite-fruit>
+				</code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h5>Catch nullish coalescing on non-nullable values</h5>
+				<p style="font-size:14px">Extended diagnostics also raise errors for useless nullish coalescing
+					operators (??) in Angular templates. Specifically, this error is raised when the input is not
+					“nullable”, meaning its type does not include null or undefined.</p>
+				<pre data-id="code">
+					<code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						{
+							"angularCompilerOptions": {
+							  "extendedDiagnostics": {
+								// The categories to use for specific diagnostics.
+								"checks": {
+								  // Maps check name to its category.
+								  "invalidBananaInBox": "error"
+								  "nullishCoalescingNotNullable": "warning"
+								},
+								// The category to use for any diagnostics not listed in `checks` above.
+								"defaultCategory": "suppress"
+							  },
+							  ...
+							},
+							...
+						}
+					</code>
+				</pre>
+			</section>
+
+			<section data-auto-animate>
+				<h5>Bind to protected component members</h5>
+				<p style="font-size:14px">In v14, you can now bind to protected component members directly from your
+					templates</p>
+				<pre data-id="code">
+					<code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						@Component({
+							selector: 'my-component',
+							template: '{{ message }}',  // Now compiles!
+						  })
+						  export class MyComponent {
+							protected message: string = 'Hello world';
+						}
+					</code>
+				</pre>
+			</section>
+
+			<section data-auto-animate>
+				<h5>NgModel OnPush</h5>
+				<p style="font-size:14px">NgModel changes are reflected in the UI for OnPush components.</p>
+				<pre data-id="code">
+					<code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
+						@Component({
+							selector: 'my-component',
+							template: `
+							  <child [ngModel]="value"></child>
+							`,
+							changeDetection: ChangeDetectionStrategy.OnPush
+						})
+						class MyComponent {}
+					</code>
+				</pre>
+			</section>
+
+			<section data-auto-animate>
+				<h5>ng completion</h5>
+				<p style="font-size:14px">Accidentally typing ng sevre instead of ng serve happens all the time. Typos
+					are one of the most common reasons a command line prompt throws an error. To solve this, v14’s new
+					ng completion introduces real-time type-ahead autocompletion!</p>
+				<div>
+					<img src="./examples/assets/completion.gif" />
+				</div>
+			</section>
+
+			<section data-auto-animate>
+				<h5>Sources:</h5>
+				<a style="font-size:14px">https://blog.angular.io/angular-v14-is-now-available-391a6db736af</a>
+				<br />
+				<a style="font-size:14px">https://www.zenesys.com/blog/angular-14-features</a>
+				<br />
+				<a style="font-size:14px">https://angular.io/guide/standalone-components</a>
+
+			</section>
+
+			<section data-auto-animate>
+				<h5>Thanks you!</h5>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="./dist/reveal.js"></script>
+	<script src="./plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			center: true,
+			hash: true,
+			plugins: [RevealHighlight]
+		});
+	</script>
+
+</body>
+
+</html>
