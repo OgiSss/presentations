@@ -180,7 +180,7 @@
 					<h3 data-id="text-props">Strictly Typed Forms</h3>
 				</section>
 				<section data-auto-animate>
-					<h3 style="margin-bottom: 100px;">Strictly Typed Forms</h3>
+					<h3>Strictly Typed Forms</h3>
 					<p style="font-size: 16px;">
 						When updating to Angular v14, a migration will automatically replace all the form entities in
 						your application by their untyped versions:
@@ -209,7 +209,7 @@
 				</section>
 
 				<section data-auto-animate>
-					<h3 style="margin-bottom: 100px;">Strictly Typed Forms</h3>
+					<h3 >Strictly Typed Forms</h3>
 					<p style="font-size: 16px;">
 						When using the automated migration, you end up with:
 					</p>
@@ -235,7 +235,7 @@
 				</section>
 
 				<section data-auto-animate>
-					<h3 style="margin-bottom: 50px;">Strictly Typed Forms</h3>
+					<h3>Strictly Typed Forms</h3>
 					<p style="font-size: 16px;">
 						Our work is to remove all the Untyped* usage, and properly type the form. Let’s start with the
 						code in the constructor as this is the most straightforward.
@@ -326,7 +326,6 @@
 							  // ...
 							}
 						}
-
 						const value = this.registerForm.value;
 						// does not compile as the `login` and `password` parameters must be strings
 						// and `value.login`, `value.passwordGroup`, `value.passwordGroup.password`
@@ -581,14 +580,18 @@ Find more at https://angular.io/guide/two-way-binding
 					<code style="font-size:15px;" data-line-numbers class="hljs" data-trim>
 						@Component({
 							selector: 'my-component',
-							template: `
-							  <child [ngModel]="value"></child>
-							`,
+							template: '<child [ngModel]="value"></child>',
 							changeDetection: ChangeDetectionStrategy.OnPush
 						})
-						class MyComponent {}
+						class MyComponent {
+							public value;
+
+						}
 					</code>
 				</pre>
+				<br />
+				<a style="font-size:14px">https://github.com/angular/angular/issues/10816</a>
+
 			</section>
 
 			<section data-auto-animate>
@@ -612,7 +615,7 @@ Find more at https://angular.io/guide/two-way-binding
 			</section>
 
 			<section data-auto-animate>
-				<h5>Thanks you!</h5>
+				<h5>Thank you!</h5>
 			</section>
 
 		</div>
